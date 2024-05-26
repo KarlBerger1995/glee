@@ -1,4 +1,29 @@
-
+body,html{
+  min-height: 100%;
+}
 body{
+  height: 100%;
+  font-size: 16px;
+  line-height: 36px;
+  color: $default-color;
+  @extend %rubik-400;
+  display: flex;
+  flex-direction: column;
+}
 
+.container{
+  max-width: 1170px;
+  padding: 0 15px;
+  margin: 0 auto;
+}
+
+.main{
+  flex-grow: 1;
+}
+
+a{
+  font-size: 14px;
+  line-height: 1;
+  color: $link;
+  display: inline-block;
 }

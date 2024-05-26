@@ -10,7 +10,7 @@ const { gifsicle, mozjpeg, optipng, svgo } = require('gulp-imagemin');
 
 function browsersync() {
   browserSync.init({
-    sever: {
+    server: {
       baseDir: 'app/'
     }
   })
@@ -18,7 +18,7 @@ function browsersync() {
 
 function styles(){
   return src('app/scss/style.scss')
-  .pipe(scss({outputStyle: 'compressed'}))
+  .pipe(scss({outputStyle: 'expanded'}))
   .pipe(concat('style.min.css'))
   .pipe(autoPrefixer({
     overrideBrowserslist: ['last 10 versions'],
@@ -43,8 +43,21 @@ function scripts() {
 function images(){
   return src('app/images/**/*.*')
   .pipe(imagemin([
+    gifsicle({ interlaced: true }),
     mozjpeg({ quality: 75, progressive: true }),
     optipng({ optimizationLevel: 5 }),
+    svgo({
+      plugins: [
+        {
+          name: 'removeViewBox',
+          active: true
+        },
+        {
+          name: 'cleanupIDs',
+          active: false
+        }
+      ]
+    })
 ]))
   .pipe(dest('dist/images'))
 }
@@ -64,9 +77,9 @@ function cleanDist() {
 }
 
 function watching(){
-  watch(['app/scss/**/*.scss'], styles);
+  watch(["app/scss/**/*.scss"], styles);
   watch(['app/js/**/*.js', '!app/js/main.min.js'], scripts);
-  watch(['app/**/*.html']).on('change', browserSync.reload);
+  watch(["app/**/*.html"]).on("change", browserSync.reload);
 }
 
 
